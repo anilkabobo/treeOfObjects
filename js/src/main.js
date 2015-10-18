@@ -1,26 +1,14 @@
-(function (global) {
-    'use strict';
+var TreeApp = (function (app) {
+  'use strict';
 
-    function Cat() {}
+  app.init = function() {
+  	app.tree.set(sampleData);
+  	app.view.renderTree(document.getElementById('wrapper'))
+  	console.log(app.tree.get());
+  	
+  }
+  return app;
+}(TreeApp || {}));
 
-    Cat.prototype.meow = function () {
-        return 'meow';
-    };
 
-    Cat.prototype.numLegs = 4;
-
-    Cat.prototype.hairLength = 'short';
-
-    function MainCoon() {
-        this.hairLength = 'long';
-        this.meow = function () {
-            return 'MEW';
-        };
-    }
-
-    global.CATS = {
-        cat: new Cat(),
-        mainCoon: new MainCoon()
-    };
-
-}(this));
+document.addEventListener("DOMContentLoaded", TreeApp.init, false);

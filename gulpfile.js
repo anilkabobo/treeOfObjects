@@ -8,8 +8,7 @@ gulp.task('webserver', function() {
     livereload: {
       enable: true,
       port: 9009
-    },
-    root: ['.']
+    }
   });
 });
 
