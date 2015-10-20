@@ -12,6 +12,8 @@ var TreeApp = (function (app) {
   			case 'remove-child':
   				app.view.deleteChild(parent);
   				break;
+  			case 'toggleView':
+  				app.view.toggleView(parent);
   		}
   	});
   }
@@ -21,7 +23,6 @@ var TreeApp = (function (app) {
   	app.tree.get();
   	app.view.renderTree(treeWrapper);
   	addEventListeners(treeWrapper);
-  	
   }
   return app;
 }(TreeApp || {}));

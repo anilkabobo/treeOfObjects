@@ -9,7 +9,8 @@ var TreeApp = (function (app) {
       tree = app.tree.get();
       var rootEl = document.createElement('div');
       rootEl.id = 'root';
-      rootEl.innerHTML = 'Root<button class="add-child">+</button>';
+      rootEl.className = 'expanded tree-item';
+      rootEl.innerHTML = '<button class="toggleView"></button>Root<button class="add-child">+</button>';
       fragment.appendChild(rootEl);
 
       renderChildren(tree);
@@ -40,9 +41,12 @@ var TreeApp = (function (app) {
     function createNewElement(id) {
       var newEl = document.createElement('div');
       newEl.id = id;
-      newEl.innerHTML = 'Item ' + id + 
-        '<button class="add-child">+</button>' + 
-        '<button class="remove-child">-</button>';
+      newEl.className = 'expanded tree-item';
+      newEl.innerHTML = 
+        '<button class="toggleView"></button>' +
+        'Item ' + id + 
+        '<button class="add-child"></button>' + 
+        '<button class="remove-child"></button>';
       return newEl;
     }
 
@@ -56,10 +60,22 @@ var TreeApp = (function (app) {
       app.tree.removeChild(parentEl.id);
     }
 
+    function toggleView(el) {
+      var className = el.className;
+      if (className.indexOf('expanded') > -1) {
+        el.className = className.replace('expanded', '');
+        el.className += ' collapsed';
+      } else {
+        el.className = className.replace('collapsed', '');
+        el.className += ' expanded';
+      }
+    }
+
     return {
       renderTree: render,
       addChild: addChild,
-      deleteChild: deleteChild
+      deleteChild: deleteChild,
+      toggleView: toggleView
     }
   })();
 

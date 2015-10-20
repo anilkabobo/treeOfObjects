@@ -1,3 +1,93 @@
-@import 'utils.less';
-@import '../../vendor/normalize-css/normalize.css';
-@import 'screen.less';
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 20px;
+	line-height: 1.5em;
+	font-family: arial;
+}
+
+div > div {
+	margin-left: 1em;
+}
+
+button:focus {
+	outline: none;
+}
+
+.add-child, .remove-child {
+	background-color: rgba(10, 10, 200, 0.1);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 50% 50%;
+	border: none;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 0.5em;
+	width: 20px;
+	height: 20px;
+	line-height: 1em;
+	opacity: 0;
+	transition: 0.2s all;
+	border-radius: 100%;
+	cursor: pointer;
+
+	&:hover {
+		background-color: rgba(20, 20, 200, 0.3);
+	}
+
+	.tree-item:hover > & {
+		opacity: 1;
+	}
+}
+
+.add-child {
+	background-image: url('/img/plus.png');
+}
+
+.remove-child {
+	background-image: url('/img/minus.png');
+}
+
+.toggleView {
+	background: none;
+	border: none;
+	font-size: 1.5em;
+	font-weight: bold;
+	margin-right: 0.2em;
+	vertical-align: middle;
+
+	&:before {
+		display: inline-block;
+		width: 25px;
+		height: 25px;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.expanded &:before {
+		content: "";
+		background-image: url('/img/minus.png')
+	}
+	.collapsed &:before {
+		content: "";
+		background-image: url('/img/plus.png')
+	}
+}
+
+.tree-item {
+	overflow: hidden;
+	height: auto;
+	min-height: 2em;
+	line-height: 2em;
+
+	&.collapsed {
+		height: 2em;
+	}
+
+	&.expanded {
+		height: auto;
+	}
+}

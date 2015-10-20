@@ -32,7 +32,7 @@ var TreeApp = (function (app) {
       parent.children = parent.children || {};
       newId = parentId + '-' + parent.nextChildId++;
       parent.children[newId] = {
-        parent: parent,
+        parent: parent.id,
         id: newId,
         children: 0,
         nextChildId: 0
@@ -47,7 +47,8 @@ var TreeApp = (function (app) {
 
     function removeChild(id) {
       var item = getChild(id);
-      delete item.parent.children[id];
+      var parent = getChild(item.parent);
+      delete parent.children[id];
       updateTree();
     }
 
