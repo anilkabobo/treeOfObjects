@@ -1,27 +1,44 @@
 var TreeApp = (function (app) {
   'use strict';
   app.tree = (function() {
-    var root = {};
+    var root = null;
 
     function get() {
+      var basicObj = {
+        id: 'root',
+        nextChildId: 0
+      }
+      if (localStorage) {
+        !localStorage.treeAppData && localStorage.setItem('treeAppData', JSON.stringify(basicObj));
+        if (!localStorage.treeAppData) {
+          localStorage.setItem('treeAppData', JSON.stringify(basicObj));
+          root = basicObj;
+        } else {
+          root = JSON.parse(localStorage.getItem('treeAppData'));
+        }
+      } else {
+        root = basicObj;
+      }
       return root;
     }
 
-    function set(tree) {
-      root = tree;
+    function updateTree() {
+      localStorage.setItem('treeAppData', JSON.stringify(root));
     }
 
     function addChild(parentId) {
       var parent = getChild(parentId);
       var newId = '';
-      ++parent.children;
-      newId = parentId + '-' + ++parent.nextChildId;
-      parent[newId] = {
+      parent.children = parent.children || {};
+      newId = parentId + '-' + parent.nextChildId++;
+      parent.children[newId] = {
         parent: parent,
         id: newId,
         children: 0,
         nextChildId: 0
       }
+      updateTree();
+      return newId;
     }
 
     function getChild(id) {
@@ -30,8 +47,8 @@ var TreeApp = (function (app) {
 
     function removeChild(id) {
       var item = getChild(id);
-      --item.parent.children;
-      delete item.parent[id];
+      delete item.parent.children[id];
+      updateTree();
     }
 
     function getChildIterative(id) {
@@ -47,20 +64,21 @@ var TreeApp = (function (app) {
 
       while (i < pathLength-1) {
         temp += '-' + path[i++];
-        if (!parent.hasOwnProperty(temp)) {
+        if (!parent.children.hasOwnProperty(temp)) {
           console.error('No item with this id')
           return null;
         }
-        parent = parent[temp];        
+        parent = parent.children[temp];        
       }
-      return parent[id];
+      return parent.children[id];
     }
 
     return {
       get: get,
-      set: set,
-      getChild: getChild
-
+      updateTree: updateTree,
+      getChild: getChild,
+      addChild: addChild,
+      removeChild: removeChild
     }
   })();
 

@@ -9,7 +9,7 @@ var TreeApp = (function (app) {
       tree = app.tree.get();
       var rootEl = document.createElement('div');
       rootEl.id = 'root';
-      rootEl.innerHTML = 'Root';
+      rootEl.innerHTML = 'Root<button class="add-child">+</button>';
       fragment.appendChild(rootEl);
 
       renderChildren(tree);
@@ -17,17 +17,18 @@ var TreeApp = (function (app) {
     }
 
     function renderChildren(parent) {
-      var newEl = null;
       var temp = null;
       var parentElement = fragment.getElementById(parent.id);
+      var children = parent.children;
 
-      for (var child in parent) {
-        if (parent.hasOwnProperty(child) && keywords.indexOf(child) === -1) {
-          temp = parent[child];
-          newEl = document.createElement('div');
-          newEl.id = child;
-          newEl.innerHTML = 'Item ' + child;
-          parentElement.appendChild(newEl);
+      if (!children) {
+        return false;
+      }
+
+      for (var child in children) {
+        if (children.hasOwnProperty(child)) {
+          temp = children[child];         
+          parentElement.appendChild(createNewElement(child));
 
           if (temp.children) {
             renderChildren(temp);
@@ -36,8 +37,29 @@ var TreeApp = (function (app) {
       }
     }
 
+    function createNewElement(id) {
+      var newEl = document.createElement('div');
+      newEl.id = id;
+      newEl.innerHTML = 'Item ' + id + 
+        '<button class="add-child">+</button>' + 
+        '<button class="remove-child">-</button>';
+      return newEl;
+    }
+
+    function addChild(parentEl) {
+      var newId = app.tree.addChild(parentEl.id);
+      parentEl.appendChild(createNewElement(newId))
+    }
+
+    function deleteChild(parentEl) {
+      parentEl.parentElement.removeChild(parentEl);
+      app.tree.removeChild(parentEl.id);
+    }
+
     return {
-      renderTree: render
+      renderTree: render,
+      addChild: addChild,
+      deleteChild: deleteChild
     }
   })();
 
